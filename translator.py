@@ -1,26 +1,28 @@
 import requests
 from bs4 import BeautifulSoup
 
-languages = ['Arabic', 'German', 'English', 'Spanish', 'French', 'Hebrew', 'Japanese', 'Dutch', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish']
+languages = ['Arabic', 'German', 'English', 'Spanish', 'French', 'Hebrew', 'Japanese', 'Dutch', 'Polish', 'Portuguese',
+             'Romanian', 'Russian', 'Turkish']
 
 
-def translate(language1, language2, word):
+def translate(language1, language2, word_to_translate):
     if language1 == language2:
         return None
     headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(f"https://context.reverso.net/translation/{language1.lower()}-{language2.lower()}/{word}", headers=headers)
+    response = requests.get(f"https://context.reverso.net/translation/"
+                            f"{language1.lower()}-{language2.lower()}/{word_to_translate}", headers=headers)
     soup = BeautifulSoup(response.content, 'html.parser')
     words = []
     if response.status_code == 200:
         trans_words = soup.find('div', {'id': "translations-content"}).find_all('a')
         for x in trans_words:
-            word = x.text
-            word = word.strip()
-            words.append(word)
+            temp_word = x.text
+            temp_word = temp_word.strip()
+            words.append(temp_word)
         print(f"\n{language2} Translations:")
         f.write(f"{language2} Translations:\n")
-        for word in words[0:1]:
-            f.write(word + '\n\n')
+        for temp_word in words[0:1]:
+            f.write(temp_word + '\n\n')
             print(word)
 
         final_sentences = []
